@@ -6,22 +6,28 @@ org 100h
 .model small
 .data  
   	
-	Board_Dis_No 		db 	'123456789'   
-  	Board_structure 	db 	10,13   
-  	                    db 	' | | ',10,13  
-  	                    db 	'-----',10,13
-                        db 	' | | ',10,13 
-                        db 	'-----',10,13
-                        db 	' | | ',10,13  
+	Board_Default db '123456789$'   
+	
+  	Board_Structure DB ' | | ',0DH,0AH
+    				DB '-----',0DH,0AH
+     				DB ' | | ',0DH,0AH
+     				DB '-----',0DH,0AH
+      				DB ' | | ',0DH,0AH,0DH,0AH,'$'  
     
     Win_Combination		db 	1,2,3,4,5,6,7,8,9                     
                         db	1,4,7,2,5,8,3,6,9
                         db 	1,5,9,3,5,7
-	
-	Board_Positinon 	db	1,3,5,11,13,15,21,23,25
+			     
+			;   DB '0|2|4',0DH,0AH
+    		;	DB '-----',0DH,0AH
+     		;	DB '14|16|18',0DH,0AH
+     		;	DB '-----',0DH,0AH
+      		;	DB '28|30|32',     
+      				
+    Board_Position db 0,2,4,14,16,18,28,30,32 
 
 .code  
-
+.startup
 main proc 
 	mov ax,@data
 	mov ds,ax
@@ -49,18 +55,32 @@ main proc
     printn ""	 
 	printn "  		  --  KataGolla Game  --"
 	
-	call SHOWBOARD
+	call SHOWBOARD 
+	jmp EXIT
+main endp
 
-SHOWBOARD proc
+SHOWBOARD proc near
 	  
-	mov cx,9	  
-	sub si,si
+	    mov cx,9	  
+		xor si,si
 	
-	print:
-		
+	GetBoardValue:	
 		 mov al,Board_Position[si]
-		 mov di,al
+		 cbw
+		 mov di,ax
+		 mov al,Board_Default[si]
+		 mov Board_structure[di],al
+		 inc si
+		 loop GetBoardValue
 		 
+		 printn "Test before board"
+		 
+		 lea dx,Board_Structure    
+		 mov ah,9
+		 int 21h
+		 printn "Test After board"
+		 
+		 ret
 		
 	
 SHOWBOARD endp
@@ -70,7 +90,6 @@ Exit:
 	mov ah,4ch
 	int 21h 
 	
-	main endp
 
 end main
 
