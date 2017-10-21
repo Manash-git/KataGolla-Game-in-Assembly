@@ -111,7 +111,6 @@ main proc
 main endp
 
 PLAY proc near
-
 	printn "	Do you want to play ??"  
 	linebreak
 	printn "	If YES Press :: Y || If NO then press :: N"
@@ -123,11 +122,10 @@ PLAY proc near
 	printch choice 
 	linebreak
 
-About:
-	print "This game is "
-
 PLAY endp
-	
+
+ABOUT proc near
+	print "Assembly Lab Project"	
 	
 		
 SHOWBOARD proc near
