@@ -7,6 +7,12 @@ org 100h
 
 ; User Define Macro 
 
+tab macro
+	mov ah,2
+	mov dl,09h
+	int 21h
+endm
+
 linebreak macro 
 	mov ah,2
 	mov dl,0ah
@@ -104,13 +110,18 @@ main proc
 	
 	
 	
-	call MENU
+	call PLAY
+	call ABOUT
 	call SHOWBOARD    
 		     
 	jmp ExitGame
 main endp
 
-PLAY proc near
+
+	; Menu function 
+
+
+PLAY proc near                                                   ; play function
 	printn "	Do you want to play ??"  
 	linebreak
 	printn "	If YES Press :: Y || If NO then press :: N"
@@ -121,13 +132,28 @@ PLAY proc near
 	print "	Output :: "
 	printch choice 
 	linebreak
-
+    
+    ret
+    
 PLAY endp
 
-ABOUT proc near
-	print "Assembly Lab Project"	
+
+ABOUT proc near                            						; about function
 	
-		
+	tab
+	tab
+	printn "Assembly Lab Project" 
+	tab
+	tab
+	printn "Developed By Manash Mondal" 
+	linebreak
+	ret
+	
+ABOUT endp
+
+
+
+
 SHOWBOARD proc near
 	  
 	    mov cx,9	  
