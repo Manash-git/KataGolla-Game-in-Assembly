@@ -47,7 +47,12 @@ endm
 
 
 .data  
-	choice db 0
+	Playchoice db 0
+	About_Text db 09,10,13," KataGolla (also known as noughts and crosses or Xs and Os)",10,13
+			   db 09," is a paper-and-pencil game for two players, X and O,",10,13
+			   db 09," who take turns marking the spaces in a 3×3 grid.",10,13
+			   db 09," The player who succeeds in placing three of their marks",10,13
+			   db 09," in a horizontal, vertical, or diagonal row wins the game.",10,13,'$'
 	
   	Greeting_Text db 10,13
   				  db 09,09,'--  KataGolla Game  --'   
@@ -71,7 +76,9 @@ endm
      		;	DB '-----'
       		;	DB '28|30|32'   
       				
-    Board_Position db 0,2,4,14,16,18,28,30,32 
+    Board_Position db 0,2,4,14,16,18,28,30,32     
+    MenuSelect db 0 
+    AboutExit db 0
 
 .code  
 .startup 
@@ -110,9 +117,10 @@ main proc
 	
 	
 	
-	call PLAY
-	call ABOUT
-	call SHOWBOARD    
+;	call PLAY
+;	call ABOUT
+;	call SHOWBOARD  
+	call Menu  
 		     
 	jmp ExitGame
 main endp
@@ -120,18 +128,58 @@ main endp
 
 	; Menu function 
 
+Menu proc near
+	linebreak
+	printn "Choose your option."
+	linebreak
+	tab
+	print "PLAY"
+	tab
+	printn "About"
+
+	
+	print "Press P :: PLAY" 
+	tab
+	linebreak
+	print "Press A :: About"  
+	
+	Menuloop: 
+	linebreak
+	print "Enter::  "
+	scanch MenuSelect
+	cmp MenuSelect,'P'
+	je PLAY
+	cmp MenuSelect,'A'
+	je ABOUT
+	
+	printn "Invalid command. Press again."
+	loop Menuloop
+	
+	
+	ret
+Menu endp
 
 PLAY proc near                                                   ; play function
 	printn "	Do you want to play ??"  
 	linebreak
 	printn "	If YES Press :: Y || If NO then press :: N"
 	
+	PlayLoop:
 	print "	Enter your Choice :: "
-	scanch choice  
+	scanch Playchoice  
 	linebreak 
 	print "	Output :: "
-	printch choice 
+	printch Playchoice 
 	linebreak
+    
+    
+    cmp Playchoice,'Y'
+    je SHOWBOARD
+    cmp Playchoice,'N'
+    je ExitGame
+    printn "Invalid Command. Press Again."
+    loop PlayLoop
+    
     
     ret
     
@@ -140,13 +188,23 @@ PLAY endp
 
 ABOUT proc near                            						; about function
 	
-	tab
-	tab
-	printn "Assembly Lab Project" 
-	tab
-	tab
-	printn "Developed By Manash Mondal" 
+	
+	PrintStr About_Text 
+	
 	linebreak
+	printn " Developed For Assembly Lab." 
+	linebreak 
+	linebreak
+	printn "Press E :: For Returing to main menu."
+	
+	
+	AboutLoop: 
+		print "Enter:: "
+		scanch AboutExit
+		cmp AboutExit,'E'
+		je Menu
+		printn "Invalid Command. Press Again."
+        loop AboutLoop
 	ret
 	
 ABOUT endp
