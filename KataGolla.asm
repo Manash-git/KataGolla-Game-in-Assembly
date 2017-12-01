@@ -220,7 +220,7 @@ player1:
      mov ah,1        ;Enter Input
      int 21h
      
-     sub al,31h
+     sub al,30h
      cmp al,1
      jl player1
      cmp al,9
@@ -309,14 +309,14 @@ player2:
     print " O Enter your move (1 to 9):"
      mov ah,1        ;Enter Input
      int 21h
+     sub al,30h
      
      cmp al,1
      jl player1
      cmp al,9
      jg player1
      
-     dec al
-     sub al,31h
+     dec al     
      cbw
      
      mov si,ax
