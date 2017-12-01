@@ -46,8 +46,11 @@ exit macro
 endm
 
 
-.data  
-	Playchoice db 0
+.data 
+    MenuSelect db 0 
+    AboutExit db 0 
+	Playchoice db 0  
+	
 	About_Text db 09,10,13," KataGolla (also known as noughts and crosses or Xs and Os)",10,13
 			   db 09," is a paper-and-pencil game for two players, X and O,",10,13
 			   db 09," who take turns marking the spaces in a 3×3 grid.",10,13
@@ -74,8 +77,7 @@ endm
       		;	DB '28|30|32'   
       				
     Board_Position db 0,2,4,14,16,18,28,30,32     
-    MenuSelect db 0 
-    AboutExit db 0
+    
 
 .code  
 .startup 
@@ -107,7 +109,7 @@ main proc
 ;	int 21h
 	
 ;    printn "" 
-    printn "  				  Welcome Folks " 
+     printn "  				  Welcome Folks " 
 ;    printn "" 
 ;    printn ""	 
 ;	 printn "  		  --  KataGolla Game  --"
@@ -171,7 +173,7 @@ PLAY proc near                                                   ; play function
     
     
     cmp Playchoice,'Y'
-    je SHOWBOARD
+    je GameON
     cmp Playchoice,'N'
     je ExitGame
     printn "Invalid Command. Press Again."
@@ -207,8 +209,184 @@ ABOUT proc near                            						; about function
 ABOUT endp
 
 
+GameON proc near
+    call SHOWBOARD
+    
+player1:
+     print "Enter your move (1 to 9):"
+     mov ah,1        ;Enter Input
+     int 21h
+     
+     cmp al,1
+     jl player1
+     cmp al,9
+     jg player1
+     
+     dec al
+     sub al,31h
+     cbw
+     
+     mov si,ax
+     mov al,Board_Default[si]
+     
+     cmp al,'X'
+     je OMsg
+     cmp al,'O'
+     je OMsg
+     
+     mov Board_Default[si],'X'
+     call showboard
+     ; CHECK START
+      
+    mov si,0
+	;sub si,si
+	mov bx,0
 
+row:
+    cmp bx,3
+    je col
+    cmp brd[si],'X'
+    jne next    
+    cmp brd[si+1],'X'
+    jne next
+    cmp brd[si+2],'X' 
+    je winX
+    jne next
+    
+    next:
+    add si,3
+    inc bx
+    jmp row
+    
+    
+col:
+    cmp bx,6
+    je cor1
+    cmp brd[di],'X'
+    jne next1    
+    cmp brd[di+3],'X'
+    jne next1
+    cmp brd[di+6],'X'
+    je winX 
+    jne next1
+    
+    next1:
+    add di,1
+    inc bx   
+    jmp col
+    
+cor1:
+    
+    cmp brd[0],'X'
+    jne cor2  
+    cmp brd[4],'X'
+    jne cor2 
+    cmp brd[8],'X'
+    je winX
 
+cor2:
+    
+    cmp brd[2],'X'
+    jne return  
+    cmp brd[4],'X'  
+    jne return 
+    cmp brd[6],'X'
+    je winX 
+    
+    
+     
+OMsg1:
+    print "The position is Already used."    
+    jmp player1
+player2:
+    print "Enter your move (1 to 9):"
+     mov ah,1        ;Enter Input
+     int 21h
+     
+     cmp al,1
+     jl player1
+     cmp al,9
+     jg player1
+     
+     dec al
+     sub al,31h
+     cbw
+     
+     mov si,ax
+     mov al,Board_Default[si]
+     
+     cmp al,'X'
+     je OMsg
+     cmp al,'O'
+     je OMsg
+     
+     mov Board_Default[si],'O'  
+     
+     mov si,0
+	;sub si,si
+	mov bx,0
+
+row:
+    cmp bx,3
+    je col
+    cmp brd[si],'O'
+    jne next    
+    cmp brd[si+1],'O'
+    jne next
+    cmp brd[si+2],'O' 
+    je winO
+    jne next
+    
+    next:
+    add si,3
+    inc bx
+    jmp row
+    
+    
+col:
+    cmp bx,6
+    je cor1
+    cmp brd[di],'O'
+    jne next1    
+    cmp brd[di+3],'O'
+    jne next1
+    cmp brd[di+6],'O'
+    je winO 
+    jne next1
+    
+    next1:
+    add di,1
+    inc bx   
+    jmp col
+    
+cor1:
+    
+    cmp brd[0],'O'
+    jne cor2  
+    cmp brd[4],'O'
+    jne cor2 
+    cmp brd[8],'O'
+    je winO
+
+cor2:
+    
+    cmp brd[2],'O'
+    jne return  
+    cmp brd[4],'O'  
+    jne return 
+    cmp brd[6],'O'
+    je winO 
+    
+     
+OMsg2:
+    print "The position is Already used."    
+    jmp player2
+    
+    ret
+GameON endp
+            
+            
+            
 SHOWBOARD proc near
 	  
 	    mov cx,9	  
