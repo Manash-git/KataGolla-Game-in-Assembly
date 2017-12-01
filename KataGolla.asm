@@ -151,7 +151,7 @@ Menu proc near
 	je PLAY
 	cmp MenuSelect,'A'
 	je ABOUT
-	
+	linebreak
 	printn "Invalid command. Press again."
 	loop Menuloop
 	
@@ -176,7 +176,8 @@ PLAY proc near                                                   ; play function
     cmp Playchoice,'Y'
     je GameON
     cmp Playchoice,'N'
-    je ExitGame
+    je ExitGame 
+    linebreak
     printn "Invalid Command. Press Again."
     loop PlayLoop
     
@@ -238,10 +239,11 @@ player1:
      cmp al,'O'
      je OMsg1
      
-     mov Board_Default[si],'X'
+     mov Board_Default[si],'X' 
+     inc count
      linebreak
      call showboard 
-     inc count
+     
      ; CHECK START
       
     mov si,0
@@ -327,10 +329,11 @@ player2:
      cmp al,'O'
      je OMsg2
      
-     mov Board_Default[si],'O'
+     mov Board_Default[si],'O' 
+     inc count
      linebreak  
      call showboard
-     inc count
+     
      
      mov si,0
 	;sub si,si
@@ -390,18 +393,22 @@ corO2:
     jne player1
      
 OMsg2:
-    print "The position is Already used."    
+    linebreak
+    printn "The position is Already used."    
     jmp player2
     
 winx:
+    linebreak
     printn "X Win"
     jmp ExitGame
     
 winO: 
+    linebreak
     printn "O win."
     jmp ExitGame
 
 tie:
+    linebreak
     printn "Match Tie"
     jmp ExitGame
         
@@ -435,11 +442,10 @@ SHOWBOARD proc near
 		
 	
 SHOWBOARD endp
-		
-
-		
+				
 ExitGame:
-	print "Thanks For Playing .."
+	linebreak
+	printn "Thanks For Playing .."
 		
 	mov ah,4ch
 	int 21h 
