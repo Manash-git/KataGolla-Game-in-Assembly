@@ -47,6 +47,7 @@ endm
 
 
 .data 
+    count db 0
     MenuSelect db 0 
     AboutExit db 0 
 	Playchoice db 0  
@@ -213,93 +214,99 @@ GameON proc near
     call SHOWBOARD
     
 player1:
-     print "Enter your move (1 to 9):"
+    cmp count,10
+    je tie
+     print "X Enter your move (1 to 9):"
      mov ah,1        ;Enter Input
      int 21h
      
+     sub al,31h
      cmp al,1
      jl player1
      cmp al,9
      jg player1
      
      dec al
-     sub al,31h
+     
      cbw
      
      mov si,ax
      mov al,Board_Default[si]
      
      cmp al,'X'
-     je OMsg
+     je OMsg1
      cmp al,'O'
-     je OMsg
+     je OMsg1
      
      mov Board_Default[si],'X'
-     call showboard
+     linebreak
+     call showboard 
+     inc count
      ; CHECK START
       
     mov si,0
 	;sub si,si
 	mov bx,0
 
-row:
+rowx:
     cmp bx,3
-    je col
-    cmp brd[si],'X'
-    jne next    
-    cmp brd[si+1],'X'
-    jne next
-    cmp brd[si+2],'X' 
+    je colx
+    cmp Board_Default[si],'X'
+    jne nextx    
+    cmp Board_Default[si+1],'X'
+    jne nextx
+    cmp Board_Default[si+2],'X' 
     je winX
-    jne next
+    jne nextx
     
-    next:
+    nextx:
     add si,3
     inc bx
-    jmp row
+    jmp rowx
     
     
-col:
+colx:
     cmp bx,6
-    je cor1
-    cmp brd[di],'X'
-    jne next1    
-    cmp brd[di+3],'X'
-    jne next1
-    cmp brd[di+6],'X'
+    je corx1
+    cmp Board_Default[si],'X'
+    jne nextx1    
+    cmp Board_Default[si+3],'X'
+    jne nextx1
+    cmp Board_Default[si+6],'X'
     je winX 
-    jne next1
+    jne nextx1
     
-    next1:
+    nextx1:
     add di,1
     inc bx   
-    jmp col
+    jmp colx
     
-cor1:
+corx1:
     
-    cmp brd[0],'X'
-    jne cor2  
-    cmp brd[4],'X'
-    jne cor2 
-    cmp brd[8],'X'
+    cmp Board_Default[0],'X'
+    jne corx2  
+    cmp Board_Default[4],'X'
+    jne corx2 
+    cmp Board_Default[8],'X'
     je winX
 
-cor2:
+corx2:
     
-    cmp brd[2],'X'
-    jne return  
-    cmp brd[4],'X'  
-    jne return 
-    cmp brd[6],'X'
+    cmp Board_Default[2],'X'
+    jne player2 
+    cmp Board_Default[4],'X'  
+    jne player2 
+    cmp Board_Default[6],'X'
     je winX 
     
+    jne player2
     
      
 OMsg1:
     print "The position is Already used."    
     jmp player1
 player2:
-    print "Enter your move (1 to 9):"
+    print " O Enter your move (1 to 9):"
      mov ah,1        ;Enter Input
      int 21h
      
@@ -316,72 +323,88 @@ player2:
      mov al,Board_Default[si]
      
      cmp al,'X'
-     je OMsg
+     je OMsg2
      cmp al,'O'
-     je OMsg
+     je OMsg2
      
-     mov Board_Default[si],'O'  
+     mov Board_Default[si],'O'
+     linebreak  
+     call showboard
+     inc count
      
      mov si,0
 	;sub si,si
 	mov bx,0
 
-row:
+rowO:
     cmp bx,3
-    je col
-    cmp brd[si],'O'
-    jne next    
-    cmp brd[si+1],'O'
-    jne next
-    cmp brd[si+2],'O' 
+    je colO
+    cmp Board_Default[si],'O'
+    jne nextO    
+    cmp Board_Default[si+1],'O'
+    jne nextO
+    cmp Board_Default[si+2],'O' 
     je winO
-    jne next
+    jne nextO
     
-    next:
+    nextO:
     add si,3
     inc bx
-    jmp row
+    jmp rowO
     
     
-col:
+colO:
     cmp bx,6
-    je cor1
-    cmp brd[di],'O'
-    jne next1    
-    cmp brd[di+3],'O'
-    jne next1
-    cmp brd[di+6],'O'
+    je corO1
+    cmp Board_Default[si],'O'
+    jne nextO1    
+    cmp Board_Default[si+3],'O'
+    jne nextO1
+    cmp Board_Default[si+6],'O'
     je winO 
-    jne next1
+    jne nextO1
     
-    next1:
+    nextO1:
     add di,1
     inc bx   
-    jmp col
+    jmp colO
     
-cor1:
+corO1:
     
-    cmp brd[0],'O'
-    jne cor2  
-    cmp brd[4],'O'
-    jne cor2 
-    cmp brd[8],'O'
+    cmp Board_Default[0],'O'
+    jne corO2  
+    cmp Board_Default[4],'O'
+    jne corO2 
+    cmp Board_Default[8],'O'
     je winO
 
-cor2:
+corO2:
     
-    cmp brd[2],'O'
-    jne return  
-    cmp brd[4],'O'  
-    jne return 
-    cmp brd[6],'O'
+    cmp Board_Default[2],'O'
+    jne player1  
+    cmp Board_Default[4],'O'  
+    jne player1
+    cmp Board_Default[6],'O'
     je winO 
     
+    jne player1
      
 OMsg2:
     print "The position is Already used."    
     jmp player2
     
+winx:
+    printn "X Win"
+    jmp ExitGame
+    
+winO: 
+    printn "O win."
+    jmp ExitGame
+
+tie:
+    printn "Match Tie"
+    jmp ExitGame
+        
     ret
 GameON endp
             
