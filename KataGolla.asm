@@ -47,7 +47,7 @@ endm
 
 
 .data 
-    count db 0
+    ;count db 0
     MenuSelect db 0 
     AboutExit db 0 
 	Playchoice db 0  
@@ -212,11 +212,15 @@ ABOUT endp
 
 
 GameON proc near
+    linebreak
     call SHOWBOARD
+    ;mov count,0
+;    sub dx,dx 
     
+     
 player1:
-    cmp count,10
-    je tie
+;    cmp dx,10
+;    je tie
      print "X Enter your move (1 to 9):"
      mov ah,1        ;Enter Input
      int 21h
@@ -240,13 +244,18 @@ player1:
      je OMsg1
      
      mov Board_Default[si],'X' 
-     inc count
+     inc dx 
+     linebreak
+     mov ax,dx
+     call outdec
+     linebreak
      linebreak
      call showboard 
      
      ; CHECK START
       
-    mov si,0
+    mov si,0 
+    mov di,0
 	;sub si,si
 	mov bx,0
 
@@ -270,11 +279,11 @@ rowx:
 colx:
     cmp bx,6
     je corx1
-    cmp Board_Default[si],'X'
+    cmp Board_Default[di],'X'
     jne nextx1    
-    cmp Board_Default[si+3],'X'
+    cmp Board_Default[di+3],'X'
     jne nextx1
-    cmp Board_Default[si+6],'X'
+    cmp Board_Default[di+6],'X'
     je winX 
     jne nextx1
     
@@ -301,13 +310,45 @@ corx2:
     cmp Board_Default[6],'X'
     je winX 
     
+    
+    
     jne player2
     
      
-OMsg1:
-    print "The position is Already used."    
-    jmp player1
+OMsg1: 
+    linebreak
+    printn "The position is Already used."    
+    jmp player1 
+    
 player2:
+;    cmp dx,10
+;    je tie 
+
+
+    sub dx,dx
+	
+	mov di,0
+	
+	process:
+	    cmp dx,9
+	    je tie
+	    cmp di,9
+	    je  nottie
+	    
+	    cmp Board_Default[di],'X'
+	    je count
+	    cmp Board_Default[di],'O'
+	    je count
+	    add di,1
+	    jmp process
+	    
+	count:
+	    add di,1
+	    inc dx
+	    jmp process
+
+   nottie:     
+         
     print " O Enter your move (1 to 9):"
      mov ah,1        ;Enter Input
      int 21h
@@ -330,12 +371,17 @@ player2:
      je OMsg2
      
      mov Board_Default[si],'O' 
-     inc count
+     inc dx
+     linebreak
+     mov ax,dx
+     call outdec
+     linebreak
      linebreak  
      call showboard
      
      
      mov si,0
+     mov di,0
 	;sub si,si
 	mov bx,0
 
@@ -359,11 +405,11 @@ rowO:
 colO:
     cmp bx,6
     je corO1
-    cmp Board_Default[si],'O'
+    cmp Board_Default[di],'O'
     jne nextO1    
-    cmp Board_Default[si+3],'O'
+    cmp Board_Default[di+3],'O'
     jne nextO1
-    cmp Board_Default[si+6],'O'
+    cmp Board_Default[di+6],'O'
     je winO 
     jne nextO1
     
@@ -389,6 +435,8 @@ corO2:
     jne player1
     cmp Board_Default[6],'O'
     je winO 
+    
+    
     
     jne player1
      
@@ -450,7 +498,7 @@ ExitGame:
 	mov ah,4ch
 	int 21h 
 	
-
+include outdec.asm
 end main
 
 	
