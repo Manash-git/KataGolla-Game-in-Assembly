@@ -105,21 +105,8 @@ main proc
 	; Print Greeting   
 	printstr Greeting_Text
 	
-;	lea dx,Greeting_Text
-;	mov ah,9
-;	int 21h
-	
-;    printn "" 
-     printn "  				  Welcome Folks " 
-;    printn "" 
-;    printn ""	 
-;	 printn "  		  --  KataGolla Game  --"
-	
-	
-	
-;	call PLAY
-;	call ABOUT
-;	call SHOWBOARD  
+     printn "  			  Welcome Folks " 
+  
 	call Menu  
 		     
 	jmp ExitGame
@@ -129,14 +116,15 @@ main endp
 	; Menu function 
 
 Menu proc near
+    
 	linebreak
 	printn "Choose your option."
 	linebreak
 	tab
 	print "PLAY"
 	tab
-	printn "About"
-
+	print "About"
+    linebreak
 	
 	print "Press P :: PLAY" 
 	tab
@@ -159,7 +147,8 @@ Menu proc near
 	ret
 Menu endp
 
-PLAY proc near                                                   ; play function
+PLAY proc near 
+                                                      ; play function
 	printn "	Do you want to play ??"  
 	linebreak
 	printn "	If YES Press :: Y || If NO then press :: N"
@@ -168,8 +157,8 @@ PLAY proc near                                                   ; play function
 	print "	Enter your Choice :: "
 	scanch Playchoice  
 	linebreak 
-	print "	Output :: "
-	printch Playchoice 
+;1	print "	Output :: "
+;	printch Playchoice 
 	linebreak
     
     
@@ -180,15 +169,13 @@ PLAY proc near                                                   ; play function
     linebreak
     printn "Invalid Command. Press Again."
     loop PlayLoop
-    
-    
+        
     ret
     
 PLAY endp
 
 
 ABOUT proc near                            						; about function
-	
 	
 	PrintStr About_Text 
 	
@@ -214,13 +201,9 @@ ABOUT endp
 GameON proc near
     linebreak
     call SHOWBOARD
-    ;mov count,0
-;    sub dx,dx 
-    
-     
+        
 player1:
-;    cmp dx,10
-;    je tie
+
      print "X Enter your move (1 to 9):"
      mov ah,1        ;Enter Input
      int 21h
@@ -232,7 +215,6 @@ player1:
      jg player1
      
      dec al
-     
      cbw
      
      mov si,ax
@@ -246,8 +228,7 @@ player1:
      mov Board_Default[si],'X' 
      inc dx 
      linebreak
-     mov ax,dx
-     call outdec
+    
      linebreak
      linebreak
      call showboard 
@@ -256,7 +237,7 @@ player1:
       
     mov si,0 
     mov di,0
-	;sub si,si
+	
 	mov bx,0
 
 rowx:
@@ -309,9 +290,7 @@ corx2:
     jne player2 
     cmp Board_Default[6],'X'
     je winX 
-    
-    
-    
+            
     jne player2
     
      
@@ -321,9 +300,6 @@ OMsg1:
     jmp player1 
     
 player2:
-;    cmp dx,10
-;    je tie 
-
 
     sub dx,dx
 	
@@ -372,9 +348,7 @@ player2:
      
      mov Board_Default[si],'O' 
      inc dx
-     linebreak
-     mov ax,dx
-     call outdec
+     linebreak2
      linebreak
      linebreak  
      call showboard
@@ -382,7 +356,6 @@ player2:
      
      mov si,0
      mov di,0
-	;sub si,si
 	mov bx,0
 
 rowO:
@@ -477,18 +450,14 @@ SHOWBOARD proc near
 		 mov al,Board_Default[si]
 		 mov Board_structure[di],al
 		 inc si
-		 loop GetBoardValue
-		 
-;		 printn "Test before board"
+		 loop GetBoardValue		 
 		 
 		 lea dx,Board_Structure    
 		 mov ah,9
 		 int 21h
-;		 printn "Test After board"
 		 
 		 ret
-		
-	
+			
 SHOWBOARD endp
 				
 ExitGame:
