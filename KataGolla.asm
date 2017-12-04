@@ -167,7 +167,7 @@ ABOUT proc near                            						; about function
 	printn "    Developed For Assembly Lab Project." 
 	linebreak 
 	linebreak
-	printn "    E :: Exit"
+	printn "    E :: EXIT ABOUT"
 	
 	
 	AboutLoop: 
