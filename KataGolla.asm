@@ -188,7 +188,7 @@ GameON proc near
     call SHOWBOARD
         
 player1:
-
+     linebreak 
      print "    X Enter your move (1 to 9)::  "
      mov ah,1        ;Enter Input
      int 21h
@@ -309,16 +309,16 @@ player2:
 	    jmp process
 
    nottie:     
-         
+    linebreak     
     print "    O Enter your move (1 to 9)::  "
      mov ah,1        ;Enter Input
      int 21h
      sub al,30h
      
      cmp al,1
-     jl player1
+     jl player2
      cmp al,9
-     jg player1
+     jg player2
      
      dec al     
      cbw
