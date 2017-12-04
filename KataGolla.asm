@@ -47,7 +47,7 @@ endm
 
 
 .data 
-    ;count db 0
+
     MenuSelect db 0 
     AboutExit db 0 
 	Playchoice db 0  
@@ -88,11 +88,6 @@ main proc
 	mov ds,ax
 	
 	; setting video mode
-	
-;	mov ah,0
-;	mov al,12h
-;	int 10h
-	
 	; Display colouring
 	
 	MOV AH, 06h    ; Scroll up function
@@ -105,7 +100,7 @@ main proc
 	; Print Greeting   
 	printstr Greeting_Text
 	
-     printn "  			  Welcome Folks " 
+     printn "  			       Welcome Folks " 
   
 	call Menu  
 		     
@@ -118,29 +113,26 @@ main endp
 Menu proc near
     
 	linebreak
-	printn "Choose your option."
-	linebreak
-	tab
-	print "PLAY"
-	tab
-	print "About"
+	linebreak	
+	print "     > Chooce <"
+    linebreak
     linebreak
 	
-	print "Press P :: PLAY" 
-	tab
+	print "      P :: PLAY" 
 	linebreak
-	print "Press A :: About"  
+	print "      A :: ABOUT"  
 	
 	Menuloop: 
 	linebreak
-	print "Enter::  "
+	linebreak
+	print "    Enter::  "
 	scanch MenuSelect
 	cmp MenuSelect,'P'
 	je PLAY
 	cmp MenuSelect,'A'
 	je ABOUT
 	linebreak
-	printn "Invalid command. Press again."
+	printn "    Invalid command. Press again."
 	loop Menuloop
 	
 	
@@ -148,26 +140,26 @@ Menu proc near
 Menu endp
 
 PLAY proc near 
-                                                      ; play function
-	printn "	Do you want to play ??"  
+    linebreak                                                  ; play function
+	printn "	play ??"  
 	linebreak
-	printn "	If YES Press :: Y || If NO then press :: N"
+	print "    Y :: YES" 
+	linebreak
+	print "    N :: NO" 
 	
 	PlayLoop:
-	print "	Enter your Choice :: "
+	linebreak
+	print "    > Choice :: "
 	scanch Playchoice  
 	linebreak 
-;1	print "	Output :: "
-;	printch Playchoice 
 	linebreak
-    
-    
+        
     cmp Playchoice,'Y'
     je GameON
     cmp Playchoice,'N'
     je ExitGame 
     linebreak
-    printn "Invalid Command. Press Again."
+    printn "    Invalid Command. Press Again."
     loop PlayLoop
         
     ret
@@ -180,18 +172,18 @@ ABOUT proc near                            						; about function
 	PrintStr About_Text 
 	
 	linebreak
-	printn " Developed For Assembly Lab." 
+	printn "    Developed For Assembly Lab Project." 
 	linebreak 
 	linebreak
-	printn "Press E :: For Returing to main menu."
+	printn "    E :: Exit"
 	
 	
 	AboutLoop: 
-		print "Enter:: "
+		print "    Enter:: "
 		scanch AboutExit
 		cmp AboutExit,'E'
 		je Menu
-		printn "Invalid Command. Press Again."
+		printn "    Invalid Command. Press Again."
         loop AboutLoop
 	ret
 	
@@ -200,11 +192,12 @@ ABOUT endp
 
 GameON proc near
     linebreak
+    
     call SHOWBOARD
         
 player1:
 
-     print "X Enter your move (1 to 9):"
+     print "    X Enter your move (1 to 9)::  "
      mov ah,1        ;Enter Input
      int 21h
      
@@ -296,7 +289,7 @@ corx2:
      
 OMsg1: 
     linebreak
-    printn "The position is Already used."    
+    printn "    The position is Already used."    
     jmp player1 
     
 player2:
@@ -325,7 +318,7 @@ player2:
 
    nottie:     
          
-    print " O Enter your move (1 to 9):"
+    print "    O Enter your move (1 to 9)::  "
      mov ah,1        ;Enter Input
      int 21h
      sub al,30h
@@ -348,7 +341,7 @@ player2:
      
      mov Board_Default[si],'O' 
      inc dx
-     linebreak2
+     linebreak
      linebreak
      linebreak  
      call showboard
@@ -415,22 +408,25 @@ corO2:
      
 OMsg2:
     linebreak
-    printn "The position is Already used."    
+    printn "    The position is Already used."    
     jmp player2
     
 winx:
     linebreak
-    printn "X Win"
+    linebreak
+    printn "        X  Win"
     jmp ExitGame
     
 winO: 
     linebreak
-    printn "O win."
+    linebreak
+    printn "        O  win"
     jmp ExitGame
 
 tie:
     linebreak
-    printn "Match Tie"
+    linebreak
+    printn "        Match Tie"
     jmp ExitGame
         
     ret
@@ -462,12 +458,11 @@ SHOWBOARD endp
 				
 ExitGame:
 	linebreak
-	printn "Thanks For Playing .."
+	printn "    Thanks For Playing .."
 		
 	mov ah,4ch
 	int 21h 
-	
-include outdec.asm
+
 end main
 
 	
