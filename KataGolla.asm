@@ -62,36 +62,15 @@ endm
   				  db 09,09,'--  KataGolla Game  --'   
   	              db 10,13,10,13,'$'
   	
-	Board_Default db '123456789$'   
-	
-;  	Board_Structure DB ' | | ',10,13
-;    				DB '-----',10,13
-;     				DB ' | | ',10,13
-;     				DB '-----',10,13
-;      				DB ' | | ',10,13,10,13,'$'  
-
-			;   DB '0|2|4'
-    		;	DB '-----'
-     		;	DB '14|16|18'
-     		;	DB '-----'
-      		;	DB '28|30|32'   
-      				
-;    Board_Position db 0,2,4,14,16,18,28,30,32  
-      				
+	Board_Default db '123456789$'
+	   
     Board_Structure DB '  | | ',10,13
     				DB ' -----',10,13
      				DB '  | | ',10,13
      				DB ' -----',10,13
-      				DB '  | | ',10,13,10,13,'$'  
-    
-			     
-            ;   DB '012345|7|9'1011
-    		;	DB '1213141516-----'2123
-     		;	DB '242526272829|31|33'3435
-     		;	DB '3637383940-----'4647
-      		;	DB '484950515253|55|57'
-     
-     Board_Position db 1,3,5,17,19,21,33,35,37 
+      				DB '  | | ',10,13,10,13,'$' 
+      				      
+    Board_Position db 1,3,5,17,19,21,33,35,37 
     
 
 .code  
@@ -182,9 +161,8 @@ PLAY endp
 
 
 ABOUT proc near                            						; about function
-	
-	PrintStr About_Text 
-	
+	linebreak
+	PrintStr About_Text 	
 	linebreak
 	printn "    Developed For Assembly Lab Project." 
 	linebreak 
