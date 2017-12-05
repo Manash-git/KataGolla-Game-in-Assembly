@@ -40,12 +40,6 @@ printch macro pchar
 	int 21h
 endm
 
-exit macro
-	mov ah,4ch
-	int 21h
-endm
-
-
 .data 
 
     MenuSelect db 0 
