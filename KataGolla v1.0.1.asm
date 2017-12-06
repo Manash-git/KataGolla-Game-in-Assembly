@@ -1,5 +1,10 @@
 ; A simple KataGolla  Game 
 
+; Develop by Manash Mondal (Copyright)
+; Editor:: EMU 8086 
+; 
+
+
 include 'EMU8086.INC'
 org 100h
 .stack 100h
@@ -157,8 +162,7 @@ PLAY endp
 ABOUT proc near                            						; about function
 	linebreak
 	PrintStr About_Text 	
-	linebreak
-	printn "    Developed For Assembly Lab Project." 
+	linebreak 
 	linebreak 
 	linebreak
 	printn "    E :: EXIT ABOUT"
